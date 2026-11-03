@@ -1,0 +1,30 @@
+1) Autenticação é o processo de verificar quem é o usuário, confirmar que ele é realmente quem diz ser. Normalmente feita com e-mail e senha.
+
+Autorização é o processo de verificar o que o usuário pode fazer depois de identificado, de acordo com o seu perfil ou permissões.
+
+A autenticação vem primeiro, e a autorização depende dela: só dá para decidir o que alguém pode fazer depois de saber quem ele é
+
+Exeemplo: o usuário Maria envia e-mail e senha em POST /public/login. O sistema confere os dados e devolve um token (autenticação). Depois, Maria tenta cadastrar um imóvel. O sistema verifica o perfil dela: como é USER e não ADMIN, ele responde 403 Forbidden (autorização negada). Se ela não enviasse o token, a resposta seria 401 Unauthorized, porque nem foi identificada.
+
+2) Stateful (com estado): o servidor guarda o estado do usuário, normalmente numa sessão. Depois do login, ele cria uma sessão e entrega ao cliente só um identificador. A cada requisição, o servidor consulta a sessão para saber quem é o usuário.
+
+Stateless (sem estado): o servidor não guarda nada sobre o usuário entre as requisições. Cada requisição leva consigo tudo o que o servidor precisa para identificar o usuário, como o token JWT. O servidor só valida o token a cada chamada.
+
+3) Semântica: o JWT é um token compacto e assinado digitalmente que carrega informações sobre o usuário, chamadas de claims. A assinatura permite ao servidor ter certeza de que o token foi emitido por ele e de que não foi alterado. 
+
+Sintaxe: são três partes codificadas separadas por ponto:
+
+header.payload.signature
+
+Header: informa o tipo do token e o algoritmo da assinatura.
+json
+  {"alg": "HS256", "typ": "JWT"}
+
+Payload: contém as claims, ou seja, os dados do usuário. 
+json
+  {"sub": "admin@teste.com", "role": "ADMIN", "iat": 1761600000, "exp": 1761603600}
+
+sub é o e-mail do usuário, role é o tipo, iat é o momento da criação e exp é o momento em que expira.
+
+Signature: é a assinatura gerada com o algoritmo do header e uma chave secreta que só o servidor conhece, calculada sobre o header e o payload. Se alguém alterar o payload, a assinatura deixa de bater e o token é recusado.
+
