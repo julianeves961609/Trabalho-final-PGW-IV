@@ -1,22 +1,19 @@
-import { Component, OnInit, inject, signal } from '@angular/core';
-import { Imovel, ImovelService } from './imovel.service';
+import { Component, inject } from '@angular/core';
+import { Router, RouterLink, RouterOutlet } from '@angular/router';
+import { AuthService } from './auth.service';
 
 @Component({
   selector: 'app-root',
-  imports: [],
+  imports: [RouterOutlet, RouterLink],
   templateUrl: './app.html',
   styleUrl: './app.css'
 })
-export class App implements OnInit {
-  private service = inject(ImovelService);
+export class App {
+  auth = inject(AuthService);
+  private router = inject(Router);
 
-  imoveis = signal<Imovel[]>([]);
-  erro = signal('');
-
-  ngOnInit() {
-    this.service.listar().subscribe({
-      next: (lista) => this.imoveis.set(lista),
-      error: () => this.erro.set('Não foi possível carregar os imóveis.')
-    });
+  sair() {
+    this.auth.logout();
+    this.router.navigateByUrl('/login');
   }
 }

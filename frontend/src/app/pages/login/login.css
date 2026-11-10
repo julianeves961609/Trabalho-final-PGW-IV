@@ -1,0 +1,16 @@
+.form-login {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-width: 320px;
+}
+
+.form-login label {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.erro {
+  color: #b00020;
+}

@@ -1,24 +1,18 @@
-<h1>Imóveis</h1>
+<header class="menu">
+  <a routerLink="/">Vitrine</a>
 
-@if (erro()) {
-  <p>{{ erro() }}</p>
-}
+  @if (!auth.logado()) {
+    <a routerLink="/login">Entrar</a>
+  } @else {
+    @if (auth.tipo() === 'ADMIN') {
+      <a routerLink="/admin">Painel</a>
+    } @else {
+      <a routerLink="/cliente">Minha área</a>
+    }
+    <button type="button" (click)="sair()">Sair</button>
+  }
+</header>
 
-@for (imovel of imoveis(); track imovel.id) {
-  <div class="card">
-    <h2>{{ imovel.titulo }}</h2>
-    <p>{{ imovel.descricao }}</p>
-    <p>
-      {{ imovel.tipoImovel?.nome }} · {{ imovel.bairro?.nome }},
-      {{ imovel.bairro?.cidade }}/{{ imovel.bairro?.estado }}
-    </p>
-    <p>
-      {{ imovel.dormitorios }} dormitórios · {{ imovel.banheiros }} banheiros ·
-      {{ imovel.garagem }} vagas
-    </p>
-    <p>Venda: R$ {{ imovel.precoVenda }} · Aluguel: R$ {{ imovel.precoAluguel }}</p>
-    <p>Status: {{ imovel.status }}</p>
-  </div>
-} @empty {
-  <p>Nenhum imóvel cadastrado.</p>
-}
+<main class="conteudo">
+  <router-outlet />
+</main>

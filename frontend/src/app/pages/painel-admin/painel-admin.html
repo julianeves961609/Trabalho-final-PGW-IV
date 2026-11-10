@@ -1,0 +1,14 @@
+<h1>Painel do administrador</h1>
+<button type="button" (click)="sair()">Sair</button>
+
+<h2>Usuários</h2>
+
+@if (erro()) {
+  <p class="erro">{{ erro() }}</p>
+}
+
+<ul>
+  @for (u of usuarios(); track u.id) {
+    <li>{{ u.nome }} · {{ u.email }} · {{ u.tipo }}</li>
+  }
+</ul>
