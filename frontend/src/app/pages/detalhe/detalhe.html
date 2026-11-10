@@ -1,0 +1,41 @@
+<a routerLink="/">← Voltar para a vitrine</a>
+
+@if (carregando()) {
+  <p>Carregando imóvel...</p>
+}
+
+@if (erro()) {
+  <p class="erro">{{ erro() }}</p>
+}
+
+@if (imovel(); as i) {
+  <article class="detalhe">
+    <h1>{{ i.titulo }}</h1>
+    <p>{{ i.tipoImovel?.nome }} · {{ i.finalidade }} · {{ i.status }}</p>
+
+    <p>{{ i.descricao }}</p>
+
+    <h2>Valores</h2>
+    @if (i.precoVenda) { <p>Venda: R$ {{ i.precoVenda }}</p> }
+    @if (i.precoAluguel) { <p>Aluguel: R$ {{ i.precoAluguel }}</p> }
+
+    <h2>Características</h2>
+    <ul>
+      <li>{{ i.dormitorios }} dormitórios</li>
+      <li>{{ i.banheiros }} banheiros</li>
+      <li>{{ i.garagem }} vagas de garagem</li>
+      @if (i.areaTotal) { <li>Área total: {{ i.areaTotal }} m²</li> }
+      @if (i.areaConstruida) { <li>Área construída: {{ i.areaConstruida }} m²</li> }
+    </ul>
+    @if (i.caracteristicas) { <p>{{ i.caracteristicas }}</p> }
+
+    <h2>Localização</h2>
+    <p>
+      {{ i.endereco }}, {{ i.numero }}
+      @if (i.complemento) { - {{ i.complemento }} }
+    </p>
+    <p>{{ i.bairro?.nome }} · {{ i.bairro?.cidade }}/{{ i.bairro?.estado }} · CEP {{ i.cep }}</p>
+
+    <a class="contato" [href]="linkContato()">Entrar em contato</a>
+  </article>
+}

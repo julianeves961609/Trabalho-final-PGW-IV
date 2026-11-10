@@ -1,0 +1,70 @@
+<h1>Imóveis</h1>
+
+<section class="filtros">
+  <input type="text" placeholder="Buscar por título ou descrição"
+         [ngModel]="busca()" (ngModelChange)="busca.set($event); mudou()" />
+
+  <select [ngModel]="finalidade()" (ngModelChange)="finalidade.set($event); mudou()">
+    <option value="">Todas as finalidades</option>
+    @for (f of finalidades(); track f) { <option [value]="f">{{ f }}</option> }
+  </select>
+
+  <select [ngModel]="tipo()" (ngModelChange)="tipo.set($event); mudou()">
+    <option value="">Todos os tipos</option>
+    @for (t of tipos(); track t) { <option [value]="t">{{ t }}</option> }
+  </select>
+
+  <select [ngModel]="bairro()" (ngModelChange)="bairro.set($event); mudou()">
+    <option value="">Todos os bairros</option>
+    @for (b of bairros(); track b) { <option [value]="b">{{ b }}</option> }
+  </select>
+
+  <select [ngModel]="dormitorios()" (ngModelChange)="dormitorios.set(+$event); mudou()">
+    <option value="0">Dormitórios: qualquer</option>
+    <option value="1">1 ou mais</option>
+    <option value="2">2 ou mais</option>
+    <option value="3">3 ou mais</option>
+    <option value="4">4 ou mais</option>
+  </select>
+
+  <select [ngModel]="ordem()" (ngModelChange)="ordem.set($event); mudou()">
+    <option value="recentes">Mais recentes</option>
+    <option value="menor">Menor preço</option>
+    <option value="maior">Maior preço</option>
+  </select>
+
+  <button type="button" (click)="limpar()">Limpar filtros</button>
+</section>
+
+@if (carregando()) {
+  <p>Carregando imóveis...</p>
+}
+
+@if (erro()) {
+  <p class="erro">{{ erro() }}</p>
+}
+
+@if (!carregando() && !erro()) {
+  <p>{{ filtrados().length }} imóvel(is) encontrado(s)</p>
+
+  <div class="lista">
+    @for (imovel of paginaAtual(); track imovel.id) {
+      <article class="card">
+        <h2>{{ imovel.titulo }}</h2>
+        <p>{{ imovel.tipoImovel?.nome }} · {{ imovel.bairro?.nome }}</p>
+        <p>{{ imovel.dormitorios }} dorm. · {{ imovel.banheiros }} banh. · {{ imovel.garagem }} vagas</p>
+        @if (imovel.precoVenda) { <p>Venda: R$ {{ imovel.precoVenda }}</p> }
+        @if (imovel.precoAluguel) { <p>Aluguel: R$ {{ imovel.precoAluguel }}</p> }
+        <a [routerLink]="['/imoveis', imovel.id]">Ver detalhes</a>
+      </article>
+    } @empty {
+      <p>Nenhum imóvel encontrado com esses filtros.</p>
+    }
+  </div>
+
+  <nav class="paginacao">
+    <button type="button" (click)="anterior()" [disabled]="pagina() === 1">Anterior</button>
+    <span>Página {{ pagina() }} de {{ totalPaginas() }}</span>
+    <button type="button" (click)="proxima()" [disabled]="pagina() === totalPaginas()">Próxima</button>
+  </nav>
+}
