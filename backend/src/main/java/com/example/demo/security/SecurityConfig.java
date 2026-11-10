@@ -34,15 +34,17 @@ public class SecurityConfig {
 
             // regras da tabela (a ordem importa: a primeira que combinar vale)
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-                .requestMatchers(HttpMethod.POST, "/public/login").permitAll()
-                .requestMatchers("/error").permitAll()
-                .requestMatchers(HttpMethod.GET, "/imoveis", "/imoveis/*").permitAll()
-                .requestMatchers(HttpMethod.PATCH, "/imoveis/*/status").authenticated()
-                .requestMatchers("/imoveis/**").hasRole("ADMIN")
-                .requestMatchers("/users/**").hasRole("ADMIN")
-                .anyRequest().authenticated()
-            )
+    .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+    .requestMatchers("/error").permitAll()
+    .requestMatchers(HttpMethod.POST, "/public/login").permitAll()
+    .requestMatchers(HttpMethod.GET, "/imoveis", "/imoveis/*").permitAll()
+    .requestMatchers(HttpMethod.GET, "/bairros", "/bairros/*", "/tipos-imoveis", "/tipos-imoveis/*").permitAll()
+    .requestMatchers(HttpMethod.PATCH, "/imoveis/*/status").authenticated()
+    .requestMatchers("/imoveis/**").hasRole("ADMIN")
+    .requestMatchers("/bairros/**", "/tipos-imoveis/**").hasRole("ADMIN")
+    .requestMatchers("/users/**").hasRole("ADMIN")
+    .anyRequest().authenticated()
+)
 
             // erros pedidos na atividade
             .exceptionHandling(ex -> ex

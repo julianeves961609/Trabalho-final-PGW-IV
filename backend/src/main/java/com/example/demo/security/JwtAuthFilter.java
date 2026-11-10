@@ -37,7 +37,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             if (jwtService.tokenValido(token)) {
                 DecodedJWT jwt = jwtService.decodificar(token);
                 String email = jwt.getSubject();
-                String role = jwt.getClaim("role").asString();
+                String role = jwt.getClaim("tipo").asString();
 
                 UsernamePasswordAuthenticationToken auth =
                         new UsernamePasswordAuthenticationToken(

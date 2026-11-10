@@ -25,7 +25,7 @@ public class JwtService {
         Date agora = new Date();
         return JWT.create()
                 .withSubject(user.getEmail())
-                .withClaim("role", user.getTipo())
+                .withClaim("tipo", user.getTipo())
                 .withIssuedAt(agora)
                 .withExpiresAt(new Date(agora.getTime() + expiration))
                 .sign(Algorithm.HMAC256(secret));
